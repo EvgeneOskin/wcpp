@@ -1,0 +1,53 @@
+#include "def_wc.h"
+
+using namespace std;
+
+char IF_name[265];
+string line_in_file;
+ifstream input_file;
+bool QUIT=false;
+
+int main (int argc, char* argv[])
+{
+  char applications_name [] = "wcpp" ;
+  if (argc >1)
+    {
+      unsigned int i, character_amount=0, line_amount=0, word_amount=1;
+      for (i = 0; argv[1][i]!='\0'; i++)
+        {
+          cout << argv [1][i];
+          IF_name[i] = argv[1][i];
+        }
+      cout << '\n';
+      input_file.open (IF_name, ios::in);
+      if (!input_file.good())
+        {
+          cout << "Type exist file name!\n";
+        }
+      else
+        {
+          while (input_file)
+            {
+              input_file.get(line_in_file[i]);
+              if(input_file) cout << line_in_file[i];
+              character_amount++;
+              if (line_in_file[i] == '\n')
+                line_amount++;
+              if (((line_in_file[i-1] == ' ') || (line_in_file[i-1] == '\t') || (line_in_file[i-1] == '\n'))
+                  && (line_in_file[i] != ' ') && (line_in_file[i] != '\n') && (line_in_file[i] != '\t') && (i != 0))
+                word_amount++;
+              i++;
+            }
+          if (line_in_file [i-2] == '\n')
+            word_amount--;
+	  character_amount--;
+          cout << "\n\033[0,33m" << character_amount << "\t" << word_amount 
+               << "\t" << line_amount << "\033[0m\n" ;
+
+        }
+      input_file.close();
+    }
+  else
+    cout << "Type file name after wcpp\n";
+  return 0;
+}
