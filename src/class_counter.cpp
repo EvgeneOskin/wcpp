@@ -51,25 +51,34 @@ unsigned int counter::line ()
 
 unsigned int counter::word ()
 {
-  size_t found;
+  size_t found_space, found_tab;
   unsigned int current_word_amount;
   words_amount = 0;
   for (unsigned int i = 0; i < lines.size(); i++)
     {
-      found = -1;
+      found_space = -1;
+      found_tab = -1;
       current_word_amount = 0;
       do
 	{
-	  found = lines[i].find (' ', found+1);
-	  if(lines[i][found] == ' ')
+	  found_space = lines[i].find (' ', found_space + 1);
+	  if ((lines[i][found_space] == ' ') && (found_space != 0) && (found_space != lines[i].size() - 1)
+	      && (lines[i][found_space - 1] != ' ') && (lines[i][found_space - 1] != '\t'))
 	    current_word_amount++;
-//	  cout <<words_amount << '\t' << i<< '\t'<< found << '\n';
 	}
-      while (int(found) != -1);
-      if ((lines[i].size() != 0) && (current_word_amount == 1))
+      while (int (found_space) != -1);
+      do
+	{
+	  found_tab = lines[i].find ('\t', found_tab + 1);
+	  if ((lines[i][found_tab] == '\t') && (found_tab != 0) && (found_tab != lines[i].size() - 1)
+	      && (lines[i][found_tab - 1] != ' ') && (lines[i][found_tab - 1] != '\t'))
+	    current_word_amount++;
+	}
+      while (int (found_tab) != -1);
+      if ((lines[i].size() != 0) && (current_word_amount != lines[i].size()))
 	current_word_amount++;
-      words_amount +=current_word_amount;
-
+      words_amount += current_word_amount;
+      cout << words_amount << '\t' << i<< '\t'<< current_word_amount << '\n';
     }
   return words_amount;
 }
